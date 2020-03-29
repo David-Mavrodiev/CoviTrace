@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity=""
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/background"
+    tools:context="com.covitrack.david.covitrack.MainActivity">
+
+    <ToggleButton
+        android:id="@+id/togglebutton"
+        style="@android:style/Widget.Holo.Button.Toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onTrackingToggleClicked"
+        android:shadowColor="@color/colorPrimary"
+        android:textColor="#FFFFFF"
+        android:textOff="Tracking off"
+        android:textOn="Tracking on"
+        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/real-time-location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="[Unknown location]"/>
+</LinearLayout>
