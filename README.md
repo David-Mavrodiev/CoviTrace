@@ -1,2 +1,2 @@
-# COVITrack
+# CoviTrace
 Health-Track
