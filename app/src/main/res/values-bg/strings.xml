@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CoviTrace</string>
+
+    <!-- Confirmation dialog -->
+    <string name="confirm_dialog_title">Сигурни ли сте?</string>
+    <string name="confirm_dialog_cancel">Отказ</string>
+    <string name="confirm_dialog_sure">Да, напълно</string>
+    <string name="confirm_infected">Напълно сигурен ли сте, че сте заразен?</string>
+    <string name="confirm_contact">Напълно сигурен ли сте, че сте контактували с заразен?</string>
+
+    <!-- Language dialog -->
+    <string name="lang_dialog_title">Избери език</string>
+
+    <!-- Getting started -->
+    <string name="go_out_title">Излизане</string>
+    <string name="go_out_description">
+        При излизане следенето трябва да бъде пуснато от потребителя.
+        По този начин ще бъде записвана локацията напълно анонимно,
+        и след това ще бъде използвана за анализ на потенциална зараза.
+    </string>
+    <string name="turn_on_gps_title">Пусната локация</string>
+    <string name="turn_on_gps_description">
+        Когато опцията за пращане на локацията бъде избрана, на всеки
+        10 секунди тя ще бъде пращана на сървър.
+    </string>
+    <string name="check_for_signals_title">Проверка</string>
+    <string name="check_for_signals_description">
+        Приложението автоматично ще ви извести, ако сте имали
+        случайна среща с някой заразен потребител.
+    </string>
+    <string name="send_signal_title">Изпратете сигнал</string>
+    <string name="send_signal_description">
+        Ако вие сте доказано заразен или сте били в контакт с някого
+        болен, веднага трябва да подадете сигнал и по този начин да
+        помогнете за ограничение на заразата!
+    </string>
+
+    <!-- User status types -->
+    <string name="user_contact_status">Контактен</string>
+    <string name="user_infected_status">Заразен</string>
+
+    <!-- User status activity -->
+    <string name="user_positive">Позитивен</string>
+    <string name="user_negative">Отрицателен</string>
+    <string name="user_healed">Излекуван</string>
+
+    <!-- Location -->
+    <string name="unknown_location">[Неизвестна локация]</string>
+    <string name="tracking_on">Пусни следене</string>
+    <string name="tracking_off">Изключи следене</string>
+
+    <!-- Agendas -->
+    <string name="contact_infected_agenda">
+        Натисни избраната опция ако си информиран, че си:
+    </string>
+
+    <string name="help">Помощ</string>
+    <string name="language">Език</string>
+
+    <!-- Error messages -->
+    <string name="failed_send_location">Грешка при пращането на локация!</string>
+</resources>

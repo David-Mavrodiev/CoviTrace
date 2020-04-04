@@ -1,8 +1,14 @@
 package com.covitrack.david.covitrack.utils;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +31,26 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static void showToast(Context context, String content, int duration) {
+        Toast toast = Toast.makeText(context, content, duration);
+        toast.show();
+    }
+
+    public static void showSnackbar(View context, String content, int duration) {
+        Snackbar snackbar = Snackbar.make(context, content, duration);
+        snackbar.show();
+    }
+
+    public static ProgressDialog showProgressDialog(Context context, String message) {
+        ProgressDialog progress = new ProgressDialog(context);
+        progress.setTitle("Loading");
+        progress.setMessage(message);
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
+
+        return progress;
     }
 
     public static boolean isForegroundServiceRunning(Context context, String serviceName) {
