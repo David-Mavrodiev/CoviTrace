@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const routers = require('./routers');
-const port = 3000;
+const port = process.env.port || 3000;
 
 app.listen(port, () => {
   console.log(`[API] CoviTrace API starts running on port ${port}...`);

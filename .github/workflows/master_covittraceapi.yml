@@ -32,4 +32,4 @@ jobs:
         app-name: 'covittraceapi'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_db954a8240bb45c18f4fc85d8bfa94ae }}
-        package: .
+        package: ./api/
