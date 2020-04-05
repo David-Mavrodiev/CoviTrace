@@ -21,6 +21,7 @@ jobs:
         node-version: '10.x'
 
     - name: npm install, build, and test
+      workingDirectory: api/
       run: |
         npm install
         npm run build --if-present
@@ -32,4 +33,4 @@ jobs:
         app-name: 'covittraceapi'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_db954a8240bb45c18f4fc85d8bfa94ae }}
-        package: ./api/
+        package: .
