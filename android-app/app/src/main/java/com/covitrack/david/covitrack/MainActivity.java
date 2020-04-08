@@ -156,6 +156,8 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
         @Override
         public void onResponse(Call<SendLocationRequestModel> call,
                                Response<SendLocationRequestModel> response) {
+            stopLoading();
+
             if (!response.isSuccessful()) {
                 View view = findViewById(R.id.main_activity_view);
                 Utils.showSnackbar(view,
@@ -165,6 +167,7 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
 
         @Override
         public void onFailure(Call<SendLocationRequestModel> call, Throwable t) {
+            stopLoading();
             View view = findViewById(R.id.main_activity_view);
             Utils.showSnackbar(view,
                     getString(R.string.failed_send_location), Toast.LENGTH_SHORT);
@@ -176,26 +179,33 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
                 @Override
                 public void onResponse(Call<StatusRequestModel> call,
                                        Response<StatusRequestModel> response) {
-                    /*if (!response.isSuccessful()) {
+                    stopLoading();
+
+                    if (!response.isSuccessful()) {
                         View view = findViewById(R.id.main_activity_view);
                         Utils.showSnackbar(view,
                                 "Failed to send status!", Snackbar.LENGTH_LONG);
                         return;
-                    }*/
+                    }
 
-                    //StatusRequestModel model = response.body();
-                    //UserStatusType status = UserStatusType.CONTACT;
-                    UserStatusType status = UserStatusType.CONTACT;
+                    try {
+                        StatusRequestModel model = response.body();
+                        UserStatusType status = UserStatusType.CONTACT;
 
-                    /*if (model.isInfected()) {
-                        status.setValue(UserStatusType.INFECTED.getValue());
-                    }*/
+                        if (model.isInfected()) {
+                            status = UserStatusType.INFECTED;
+                        }
 
-                    redirectToUserStatusActivity(status);
+                        redirectToUserStatusActivity(status);
+                    } catch (Exception e) {
+                        Log.d("API", "Error while retrieving data.");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<StatusRequestModel> call, Throwable t) {
+                    stopLoading();
+
                     View view = findViewById(R.id.main_activity_view);
                     Utils.showSnackbar(view,
                             "Failed to send status!", Snackbar.LENGTH_LONG);
@@ -207,8 +217,11 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getBundleExtra("location-data");
             Location lastKnownLocation = (Location) bundle.getParcelable("location");
+            Boolean isTrackingEnabled =
+                    Utils.isForegroundServiceRunning(MainActivity.this,
+                            BackgroundTrackingService.class.getName());
 
-            if (lastKnownLocation != null) {
+            if (lastKnownLocation != null && isTrackingEnabled) {
                 TextView textView = findViewById(R.id.real_time_location);
                 double longitude = lastKnownLocation.getLongitude();
                 double latitude = lastKnownLocation.getLatitude();
@@ -257,11 +270,6 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
      * he/she is infected or contact to other person
      */
     private void redirectToUserStatusActivity(UserStatusType status) {
-        if (this.progress != null) {
-            this.progress.dismiss();
-            this.progress = null;
-        }
-
         Intent redirectIntent =
                 new Intent(getApplicationContext(), UserStatusActivity.class);
         UserStatusNavigationData statusData = new UserStatusNavigationData(status);
@@ -282,8 +290,7 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
             return;
         }
 
-        this.progress =
-                Utils.showProgressDialog(this, "Send your status");
+        this.startLoading();
 
         if (Constants.CONTACTED_CONFIRMATION.equals(action)) {
             Log.i("API", "Send contacted status...");
@@ -294,5 +301,17 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
             this.apiService.sendStatus(this.identityManager.getUniqueId(),
                     Constants.INFECTED, this.sendStatusCallback);
         }
+    }
+
+    private void stopLoading() {
+        if (this.progress != null) {
+            this.progress.dismiss();
+            this.progress = null;
+        }
+    }
+
+    private void startLoading() {
+        this.progress =
+                Utils.showProgressDialog(this, "Send your status");
     }
 }

@@ -13,14 +13,14 @@ import retrofit2.http.POST;
 
 public interface Api {
     public final String BASE_API_URL =
-            "http://tribunpeer1.northeurope.cloudapp.azure.com/covitrace/";
+            "https://covitrace-api.herokuapp.com/api/";
 
-    @GET("getstatus")
-    Call<StatusResponseModel> getStatus(@Body BaseRequestModel requestModel);
+    @GET("status")
+    Call<SendLocationRequestModel> getStatus(@Body BaseRequestModel requestModel);
 
-    @POST("sendlocation")
+    @POST("location")
     Call<SendLocationRequestModel> sendLocation(@Body SendLocationRequestModel requestModel);
 
-    @POST("sendstatus")
+    @POST("status")
     Call<StatusRequestModel> sendStatus(@Body StatusRequestModel requestModel);
 }

@@ -1,0 +1,8 @@
+{
+  "PAGE_LIMIT": 20,
+  "PORT": 3003,
+  "MONGODB": "CoviTrace",
+  "MONGO_DEBUG": false,
+  "MODE_TYPE": "localhost",
+  "DBHOST": "localhost"
+}

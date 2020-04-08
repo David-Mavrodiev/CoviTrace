@@ -19,10 +19,13 @@ router
     });
   })
   .post('/status', (req, res) => {
+    console.log(req.body);
     // TODO save the user status
+    res.send(req.body);
   })
   .post('/location', (req, res) => {
     // TODO save the user location
+    res.send(req.body);
   });
 
 module.exports = {

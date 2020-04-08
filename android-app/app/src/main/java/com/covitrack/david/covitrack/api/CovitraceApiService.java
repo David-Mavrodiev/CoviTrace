@@ -13,8 +13,15 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * This class is responsible for all communication with the server
+ */
 public class CovitraceApiService {
-    public void getStatus(String uniqueId, Callback<StatusResponseModel> callback) {
+    /**
+     * Gets information from the server if the user may be infected or in contact
+     * with infected person.
+     */
+    public void getStatus(String uniqueId, Callback<SendLocationRequestModel> callback) {
         Retrofit builder = new Retrofit.Builder()
                 .baseUrl(Api.BASE_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -24,10 +31,13 @@ public class CovitraceApiService {
         requestModel.setUniqueId(uniqueId);
 
         Api api = builder.create(Api.class);
-        Call<StatusResponseModel> getStatusCall = api.getStatus(requestModel);
+        Call<SendLocationRequestModel> getStatusCall = api.getStatus(requestModel);
         getStatusCall.enqueue(callback);
     }
 
+    /**
+     * Sends location in format [latitude, longitude]
+     */
     public void sendLocation(String uniqueId, Double latitude, Double longitude,
                              Callback<SendLocationRequestModel> callback) {
         Retrofit builder = new Retrofit.Builder()
@@ -45,6 +55,9 @@ public class CovitraceApiService {
         sendLocationCall.enqueue(callback);
     }
 
+    /**
+     * Send status. There are 2 types of status - infected or contact
+     */
     public void sendStatus(String uniqueId, int flag, Callback<StatusRequestModel> callback) {
         Retrofit builder = new Retrofit.Builder()
                 .baseUrl(Api.BASE_API_URL)
