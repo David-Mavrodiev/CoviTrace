@@ -2,7 +2,7 @@
   "name": "covitrace-api",
   "version": "1.0.0",
   "description": "Provides API for CoviTrace mobile application",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +14,9 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0"
+  },
+  "engines": {
+    "node": "10.16.0",
+    "npm": "6.9.0"
   }
 }
