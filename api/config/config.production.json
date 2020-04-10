@@ -3,7 +3,7 @@
   "PORT": 3003,
   "MONGO_DEBUG": false,
   "MODE_TYPE": "localhost",
-  "DBHOST": "localhost",
-  "DBPORT": 27017,
+  "DBHOST": "admin:dsmpass13@ds233895.mlab.com",
+  "DBPORT": 33895,
   "DBNAME": "covitrace"
 }

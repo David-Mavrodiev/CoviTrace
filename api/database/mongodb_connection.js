@@ -5,7 +5,7 @@ module.exports = (ENV) => {
   mongoose.Promise = global.Promise;
   mongoose.set("debug", ENV.MONGO_DEBUG);
 
-  let url = `mongodb://${ENV.DBHOST}:27017/${ENV.MONGODB}`;
+  let url = `mongodb://${ENV.DBHOST}:${ENV.DBPORT}/${ENV.DBNAME}`;
   mongoose.connection.db
   /*create mongoDB connection*/
   mongoose.connect(
@@ -17,7 +17,7 @@ module.exports = (ENV) => {
   mongoose.connection.on("connected", () => {
     console.log(
       chalk`{green Successfully connected to mongoDB {green.bold ${
-        ENV.MONGODB
+        ENV.DBNAME
       }}}`
     );
   });
@@ -26,7 +26,7 @@ module.exports = (ENV) => {
   mongoose.connection.on("error", err => {
     console.error(
       chalk`{red Failed to connect to mongoDB: {red.bold ${
-        ENV.MONGODB
+        ENV.DBNAME
       }, ${err}}}`
     );
   });
@@ -35,7 +35,7 @@ module.exports = (ENV) => {
   mongoose.connection.on("disconnected", err => {
     console.log(
       chalk`{red Default connection to mongoDB: {red.bold ${
-        ENV.MONGODB
+        ENV.DBNAME
       }} disconnected}`
     );
   });

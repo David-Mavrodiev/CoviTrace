@@ -1,11 +1,12 @@
-//Data providers classes
-const LocationDataProviderClass = require('../data/locations.data');
-
 //Services classes
-const InfectionLocatorServiceClass = require('../services/infection-locator.service');
+const LocationSnapshotService = require('../services/location-snapshot.service');
+const UserStatusService = require('../services/user-status.service');
 
 module.exports = {
-  getInfectionLocatorService: () => {
-    return new InfectionLocatorServiceClass(new LocationDataProviderClass());
+  getLocationSnapshotService: () => {
+    return new LocationSnapshotService();
+  },
+  getUserStatusService: () => {
+    return new UserStatusService();
   }
 }

@@ -3,7 +3,7 @@ const router  = express.Router();
 const services = require('../services');
 
 //Services instances
-const InfectionLocatorService = services.getInfectionLocatorService();
+const LocationSnapshotService = services.getLocationSnapshotService();
 
 router.use((req, res, next) => {
   console.log(`[${Date.now()} ${req.method} ${req.path}]`);
@@ -12,7 +12,6 @@ router.use((req, res, next) => {
 
 router
   .get('/status', (req, res) => {
-    InfectionLocatorService.getContactedPersons();
     // TODO get the user status
     res.send({
       success: true
@@ -23,9 +22,20 @@ router
     // TODO save the user status
     res.send(req.body);
   })
-  .post('/location', (req, res) => {
-    // TODO save the user location
-    res.send(req.body);
+  .post('/location', async (req, res) => {
+    // Create location model
+    const model = {
+      timestamp: new Date().getTime(),
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      userId: req.body.uniqueId
+    };
+    await LocationSnapshotService.save(model)
+    /*  .then(() => {
+        res.send(req.body);
+      }).catch(err => {
+        res.status(500).send(req.body);
+      });*/
   });
 
 module.exports = {
