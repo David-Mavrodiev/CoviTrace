@@ -114,4 +114,13 @@
         android:layout_alignTop="@+id/help"
         android:text="@string/language"/>
 
+    <ImageView
+        android:id="@+id/statusIcon"
+        android:layout_width="140dp"
+        android:layout_height="106dp"
+        android:layout_alignTop="@+id/mainControls"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        app:srcCompat="@drawable/contact" />
+
 </RelativeLayout>

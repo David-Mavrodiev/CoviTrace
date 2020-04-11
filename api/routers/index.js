@@ -4,6 +4,7 @@ const services = require('../services');
 
 //Services instances
 const LocationSnapshotService = services.getLocationSnapshotService();
+const UserStatusService = services.getUserStatusService();
 
 router.use((req, res, next) => {
   console.log(`[${Date.now()} ${req.method} ${req.path}]`);
@@ -11,31 +12,47 @@ router.use((req, res, next) => {
 });
 
 router
-  .get('/status', (req, res) => {
-    // TODO get the user status
-    res.send({
-      success: true
-    });
+  .post('/get-status', async (req, res) => {
+    try {
+      let body = req.body;
+      let status = await UserStatusService.getStatus(body.uniqueId);
+      body.infected = status.isInfected;
+      body.contacted = status.isContacted;
+      console.log(body);
+      res.send(body);
+    } catch (err) {
+      console.log(`[ERROR] ${err.message}`);
+      res.status(500).send(req.body);
+    }
   })
-  .post('/status', (req, res) => {
-    console.log(req.body);
-    // TODO save the user status
-    res.send(req.body);
+  .post('/status', async (req, res) => {
+    try {
+      await UserStatusService.setStatus({
+        userId: req.body.uniqueId,
+        contacted: req.body.contacted,
+        infected: req.body.infected
+      });
+      res.send(req.body);
+    } catch (err) {
+      console.log(`[ERROR] ${err.message}`);
+      res.status(500).send(req.body);
+    }
   })
   .post('/location', async (req, res) => {
-    // Create location model
     const model = {
       timestamp: new Date().getTime(),
       latitude: req.body.latitude,
       longitude: req.body.longitude,
       userId: req.body.uniqueId
     };
-    await LocationSnapshotService.save(model)
-    /*  .then(() => {
-        res.send(req.body);
-      }).catch(err => {
-        res.status(500).send(req.body);
-      });*/
+
+    try {
+      await LocationSnapshotService.save(model)
+      res.send(req.body);
+    } catch (err) {
+      console.log(`[ERROR] ${err.message}`);
+      res.status(500).send(req.body);
+    }
   });
 
 module.exports = {

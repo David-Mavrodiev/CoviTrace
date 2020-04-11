@@ -21,17 +21,17 @@ public class CovitraceApiService {
      * Gets information from the server if the user may be infected or in contact
      * with infected person.
      */
-    public void getStatus(String uniqueId, Callback<SendLocationRequestModel> callback) {
+    public void getStatus(String uniqueId, Callback<StatusRequestModel> callback) {
         Retrofit builder = new Retrofit.Builder()
                 .baseUrl(Api.BASE_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        BaseRequestModel requestModel = new BaseRequestModel();
+        StatusRequestModel requestModel = new StatusRequestModel();
         requestModel.setUniqueId(uniqueId);
 
         Api api = builder.create(Api.class);
-        Call<SendLocationRequestModel> getStatusCall = api.getStatus(requestModel);
+        Call<StatusRequestModel> getStatusCall = api.getStatus(requestModel);
         getStatusCall.enqueue(callback);
     }
 

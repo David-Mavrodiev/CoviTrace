@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -47,6 +50,8 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
     private ProgressDialog progress = null;
     private IdentityManager identityManager;
     private CovitraceApiService apiService;
+
+    private Handler handler = new Handler();
 
     public MainActivity() {
         // GPS and internet permissions
@@ -86,6 +91,9 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
 
         supportStartPostponedEnterTransition();
         supportPostponeEnterTransition();
+
+        // Start sending location on equal intervals
+        this.handler.post(periodicStatusUpdate);
     }
 
     /**
@@ -174,6 +182,35 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
         }
     };
 
+    private Runnable periodicStatusUpdate = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(periodicStatusUpdate, 10 * 1000 - SystemClock.elapsedRealtime() % 1000);
+            apiService.getStatus(identityManager.getUniqueId(), new Callback<StatusRequestModel>() {
+                @Override
+                public void onResponse(Call<StatusRequestModel> call, Response<StatusRequestModel> response) {
+                    if (!response.isSuccessful()) {
+                        return;
+                    }
+
+                    UserStatusType status = UserStatusType.NONE;
+                    if (response.body().isInfected()) {
+                        status = UserStatusType.INFECTED;
+                    } else if (response.body().isContacted()) {
+                        status = UserStatusType.CONTACT;
+                    }
+
+                    receiveStatus(status);
+                }
+
+                @Override
+                public void onFailure(Call<StatusRequestModel> call, Throwable t) {
+
+                }
+            });
+        }
+    };
+
     private Callback<StatusRequestModel> sendStatusCallback =
             new Callback<StatusRequestModel>() {
                 @Override
@@ -215,32 +252,52 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getBundleExtra("location-data");
-            Location lastKnownLocation = (Location) bundle.getParcelable("location");
-            Boolean isTrackingEnabled =
-                    Utils.isForegroundServiceRunning(MainActivity.this,
-                            BackgroundTrackingService.class.getName());
+            String action = intent.getStringExtra("action");
 
-            if (lastKnownLocation != null && isTrackingEnabled) {
-                TextView textView = findViewById(R.id.real_time_location);
-                double longitude = lastKnownLocation.getLongitude();
-                double latitude = lastKnownLocation.getLatitude();
-
-                String locationFormattedText = String.format("[%s, %s]",
-                        longitude, latitude);
-
-                // Persist formatted location
-                SharedPreferences.Editor edit = preferences.edit();
-                edit.putString(Constants.PERSISTED_LAST_KNOWN_LOCATION, locationFormattedText);
-                edit.apply();
-
-                apiService.sendLocation(identityManager.getUniqueId(),
-                        latitude, longitude, sendLocationCallback);
-
-                textView.setText(locationFormattedText);
+            if (action.equals("location")) {
+                receiveLocation(intent);
             }
         }
     };
+
+    private void receiveStatus(UserStatusType status) {
+        ImageView imageView = findViewById(R.id.statusIcon);
+
+        if (status == UserStatusType.INFECTED) {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.covid));
+        } else if (status == UserStatusType.CONTACT) {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.contact));
+        } else if (status == UserStatusType.NONE) {
+
+        }
+    }
+
+    private void receiveLocation(Intent intent) {
+        Bundle bundle = intent.getBundleExtra("location-data");
+        Location lastKnownLocation = (Location) bundle.getParcelable("location");
+        Boolean isTrackingEnabled =
+                Utils.isForegroundServiceRunning(MainActivity.this,
+                        BackgroundTrackingService.class.getName());
+
+        if (lastKnownLocation != null && isTrackingEnabled) {
+            TextView textView = findViewById(R.id.real_time_location);
+            double longitude = lastKnownLocation.getLongitude();
+            double latitude = lastKnownLocation.getLatitude();
+
+            String locationFormattedText = String.format("[%s, %s]",
+                    longitude, latitude);
+
+            // Persist formatted location
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putString(Constants.PERSISTED_LAST_KNOWN_LOCATION, locationFormattedText);
+            edit.apply();
+
+            apiService.sendLocation(identityManager.getUniqueId(),
+                    latitude, longitude, sendLocationCallback);
+
+            textView.setText(locationFormattedText);
+        }
+    }
 
     public void registerLocationBroadcastReceiver() {
         LocalBroadcastManager

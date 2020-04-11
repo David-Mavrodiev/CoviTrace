@@ -15,8 +15,8 @@ public interface Api {
     public final String BASE_API_URL =
             "https://covitrace-api.herokuapp.com/api/";
 
-    @GET("status")
-    Call<SendLocationRequestModel> getStatus(@Body BaseRequestModel requestModel);
+    @POST("get-status")
+    Call<StatusRequestModel> getStatus(@Body StatusRequestModel requestModel);
 
     @POST("location")
     Call<SendLocationRequestModel> sendLocation(@Body SendLocationRequestModel requestModel);

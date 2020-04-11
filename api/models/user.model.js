@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 let user = new Schema({
   uniqueId: {
     type: String,
-    trim: true
+    trim: true,
+    unique: true
   },
   status: {
     type: String,
@@ -12,6 +13,11 @@ let user = new Schema({
   },
   contacts: [{
     locationSnapshotId: {
+      type: String,
+      trim: true,
+      unique: true
+    },
+    userId: {
       type: String,
       trim: true
     }

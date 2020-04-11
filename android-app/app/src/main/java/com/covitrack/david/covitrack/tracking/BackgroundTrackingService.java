@@ -1,36 +1,39 @@
 package com.covitrack.david.covitrack.tracking;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.covitrack.david.covitrack.MainActivity;
 import com.covitrack.david.covitrack.R;
+import com.covitrack.david.covitrack.api.CovitraceApiService;
+import com.covitrack.david.covitrack.api.models.requests.StatusRequestModel;
+import com.covitrack.david.covitrack.models.UserStatusType;
 import com.covitrack.david.covitrack.utils.Constants;
+import com.covitrack.david.covitrack.utils.IdentityManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.covitrack.david.covitrack.App.CHANNEL_ID;
-import static com.covitrack.david.covitrack.MainActivity.STOP_TRACKING_SERVICE_FLAG;
 
 public class BackgroundTrackingService extends Service implements LocationListener {
 
@@ -39,7 +42,7 @@ public class BackgroundTrackingService extends Service implements LocationListen
         super.onCreate();
     }
 
-    private Handler handler = new Handler();
+    private LocalBroadcastManager broadcastManager;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -58,19 +61,14 @@ public class BackgroundTrackingService extends Service implements LocationListen
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
+        this.broadcastManager = LocalBroadcastManager.getInstance(this);
+
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("COVITrace Application")
                 .setContentText(input)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.app_icon)
                 .setContentIntent(pendingIntent)
                 .build();
-
-        /*LocalBroadcastManager
-                .getInstance(this)
-                .registerReceiver(this.receiver, new IntentFilter(MainActivity.class.getName()));*/
-
-        // Start sending location on equal intervals
-        handler.post(periodicLocationSendUpdate);
 
         getLocation();
 
@@ -79,43 +77,24 @@ public class BackgroundTrackingService extends Service implements LocationListen
         return START_NOT_STICKY;
     }
 
-    /**
-     * Listens for messages send from main activity
-     */
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i("TRACKING", "Received stop service...");
-            Bundle bundle = intent.getExtras();
-            String actionFlag = bundle.getString("status");
+    private void sendUserStatusToActivity(UserStatusType status) {
+        Intent statusIntent = new Intent(BackgroundTrackingService.class.getName());
+        statusIntent.putExtra("action", "status");
+        statusIntent.putExtra("status", status.getValue());
 
-            // Stop service if activity sends this message
-            if (STOP_TRACKING_SERVICE_FLAG.equals(actionFlag)) {
-                stopSelf();
-            }
-        }
-    };
-
-    private Runnable periodicLocationSendUpdate = new Runnable() {
-        @Override
-        public void run() {
-            handler.postDelayed(periodicLocationSendUpdate, 10 * 1000 - SystemClock.elapsedRealtime() % 1000);
-            // Send API location information
-            Log.i("API_SEND", "Called...");
-            location = getLocation();
-            sendLocationToActivity();
-        }
-    };
+        this.broadcastManager.sendBroadcast(statusIntent);
+    }
 
     private void sendLocationToActivity() {
         Intent locationIntent = new Intent(BackgroundTrackingService.class.getName());
+        locationIntent.putExtra("action", "location");
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("location", this.getLocation());
 
         locationIntent.putExtra("location-data", bundle);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(locationIntent);
+        this.broadcastManager.sendBroadcast(locationIntent);
     }
 
     @Override
