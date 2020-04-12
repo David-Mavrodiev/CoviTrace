@@ -18,7 +18,6 @@ router
       let status = await UserStatusService.getStatus(body.uniqueId);
       body.infected = status.isInfected;
       body.contacted = status.isContacted;
-      console.log(body);
       res.send(body);
     } catch (err) {
       console.log(`[ERROR] ${err.message}`);

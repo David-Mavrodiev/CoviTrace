@@ -11,9 +11,6 @@ const TIME_ERROR_RANGE_MILLISECONDS = 10000;
  * @param {*} locB 
  */
 function compareLocationSnapshots(locA, locB) {
-  //console.log(`LocA: ${locA.latitude} ${locA.longitude}`);
-  //console.log(`LocB: ${locB.latitude} ${locB.longitude}`);
-
   let isTimeSimilar = false, isLocationSimilar = false;
   if (locA.timestamp - TIME_ERROR_RANGE_MILLISECONDS < locB.timestamp &&
       locA.timestamp + TIME_ERROR_RANGE_MILLISECONDS > locB.timestamp) {
@@ -26,8 +23,6 @@ function compareLocationSnapshots(locA, locB) {
       locA.longitude + GPS_ERROR_RANGE > locB.longitude) {
         isLocationSimilar = true;
   }
-
-  //console.log(`Compare result: time -> ${isTimeSimilar} location -> ${isLocationSimilar}`);
 
   return isTimeSimilar && isLocationSimilar;
 }
@@ -53,7 +48,6 @@ class LocationSnapshotService {
     for (let i = 0; i < snapshots.length; i++) {
       const snapshot = snapshots[i];
       if (snapshot.userId != locationSnapshot.userId && compareLocationSnapshots(locationSnapshot, snapshot)) {
-        //console.log("[LOG] Found location snapshots coincidence...");
         let user = await UserStatusService.getUserById(snapshot.userId);
 
         currentUser.contacts.push({

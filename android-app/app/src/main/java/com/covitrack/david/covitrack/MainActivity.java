@@ -1,5 +1,9 @@
 package com.covitrack.david.covitrack;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,6 +21,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,6 +73,14 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
         setContentView(R.layout.activity_main);
 
         this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // If user set state on his own, then redirect to status activity
+        int status_flag = this.preferences.getInt(Constants.USER_STATE_STATUS, -1);
+        if (status_flag == UserStatusType.CONTACT.getValue()) {
+            this.redirectToUserStatusActivity(UserStatusType.CONTACT);
+        } else if (status_flag == UserStatusType.INFECTED.getValue()) {
+            this.redirectToUserStatusActivity(UserStatusType.INFECTED);
+        }
 
         this.identityManager = new IdentityManager(this.preferences);
 
@@ -133,11 +146,19 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
     }
 
     public void onInfectedButtonClicked(View view) {
+        SharedPreferences.Editor editor = this.preferences.edit();
+        editor.putInt(Constants.USER_STATE_STATUS, UserStatusType.INFECTED.getValue());
+        editor.apply();
+
         String content = getString(R.string.confirm_infected);
         this.openConfirmationDialog(Constants.INFECTED_CONFIRMATION, content);
     }
 
     public void onContactButtonClicked(View view) {
+        SharedPreferences.Editor editor = this.preferences.edit();
+        editor.putInt(Constants.USER_STATE_STATUS, UserStatusType.CONTACT.getValue());
+        editor.apply();
+
         String content = getString(R.string.confirm_contact);
         this.openConfirmationDialog(Constants.CONTACTED_CONFIRMATION, content);
     }
@@ -190,6 +211,10 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
                 @Override
                 public void onResponse(Call<StatusRequestModel> call, Response<StatusRequestModel> response) {
                     if (!response.isSuccessful()) {
+                        View view = findViewById(R.id.main_activity_view);
+                        Utils.showSnackbar(view,
+                                getString(R.string.failed_to_get_status),
+                                Snackbar.LENGTH_LONG);
                         return;
                     }
 
@@ -205,7 +230,10 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
 
                 @Override
                 public void onFailure(Call<StatusRequestModel> call, Throwable t) {
-
+                    View view = findViewById(R.id.main_activity_view);
+                    Utils.showSnackbar(view,
+                            getString(R.string.failed_to_get_status),
+                            Snackbar.LENGTH_LONG);
                 }
             });
         }
@@ -221,7 +249,8 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
                     if (!response.isSuccessful()) {
                         View view = findViewById(R.id.main_activity_view);
                         Utils.showSnackbar(view,
-                                "Failed to send status!", Snackbar.LENGTH_LONG);
+                                getString(R.string.failed_to_send_status),
+                                Snackbar.LENGTH_LONG);
                         return;
                     }
 
@@ -245,7 +274,8 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
 
                     View view = findViewById(R.id.main_activity_view);
                     Utils.showSnackbar(view,
-                            "Failed to send status!", Snackbar.LENGTH_LONG);
+                            getString(R.string.failed_to_send_status),
+                            Snackbar.LENGTH_LONG);
                 }
             };
 
@@ -261,15 +291,39 @@ public class MainActivity extends MultilingualBaseActivity implements Dialog.Dia
     };
 
     private void receiveStatus(UserStatusType status) {
+        if (status == UserStatusType.NONE) {
+            return;
+        }
+
+        Button animatedButton = null;
         ImageView imageView = findViewById(R.id.statusIcon);
+
+        PropertyValuesHolder scaleX =
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 0f, 1.5f, 1f);
+        PropertyValuesHolder scaleY =
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f, 1.5f, 1f);
+        PropertyValuesHolder alpha =
+                PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f);
 
         if (status == UserStatusType.INFECTED) {
             imageView.setImageDrawable(getResources().getDrawable(R.drawable.covid));
+            animatedButton = findViewById(R.id.infectedButton);
         } else if (status == UserStatusType.CONTACT) {
             imageView.setImageDrawable(getResources().getDrawable(R.drawable.contact));
-        } else if (status == UserStatusType.NONE) {
-
+            animatedButton = findViewById(R.id.contactButton);
         }
+
+        ObjectAnimator fadeInIcon =
+                ObjectAnimator.ofPropertyValuesHolder(imageView, scaleX, scaleY, alpha)
+                .setDuration(5000);
+
+        ObjectAnimator popupButton =
+                ObjectAnimator.ofPropertyValuesHolder(animatedButton, scaleX, scaleY)
+                .setDuration(5000);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(fadeInIcon).before(popupButton);
+        animatorSet.start();
     }
 
     private void receiveLocation(Intent intent) {

@@ -8,6 +8,12 @@ public class Constants {
     // Confirmation modal actions
     public static final String CONTACTED_CONFIRMATION = "contacted-confirmation";
     public static final String INFECTED_CONFIRMATION = "infected-confirmation";
+    public static final String CONTACTED_NEGATIVE_CONFIRMATION =
+            "contacted-negative-confirmation";
+    public static final String CONTACTED_POSITIVE_CONFIRMATION =
+            "contacted-positive-confirmation";
+    public static final String HEALED_CONFIRMATION =
+            "healed-confirmation";
 
     //API
     public static final int CONTACTED = 1;
@@ -15,4 +21,7 @@ public class Constants {
 
     //NAVIGATION
     public static final String USER_STATUS = "UserStatusIntent";
+
+    //Preferences keys
+    public static final String USER_STATE_STATUS = "user-status";
 }

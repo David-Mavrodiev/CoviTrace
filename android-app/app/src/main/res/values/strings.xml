@@ -7,6 +7,15 @@
     <string name="confirm_dialog_sure">Sure</string>
     <string name="confirm_infected">Are you sure, you are infected?</string>
     <string name="confirm_contact">Are you sure, you had contact with infected person?</string>
+    <string name="confirm_contact_positive">
+        Are you sure? Please refer to the description before updating status!
+    </string>
+    <string name="confirm_contact_negative">
+        Are you sure? Please refer to the description before updating status!
+    </string>
+    <string name="confirm_healed">
+        Are you sure? Please refer to the description before updating status!
+    </string>
 
     <!-- Language dialog -->
     <string name="lang_dialog_title">Choose language</string>
@@ -53,4 +62,6 @@
 
     <!-- Error messages -->
     <string name="failed_send_location">Failed to send location!</string>
+    <string name="failed_to_send_status">Failed to send status!</string>
+    <string name="failed_to_get_status">Failed to get status!</string>
 </resources>

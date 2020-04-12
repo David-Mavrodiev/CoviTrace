@@ -35,6 +35,10 @@ class UserStatusService {
       user.status = INFECTED_STATUS;
     }
 
+    if (!model.contacted && !model.infected) {
+      user.status = NO_STATUS;
+    }
+
     return Promise.resolve(user.save());
   }
 
