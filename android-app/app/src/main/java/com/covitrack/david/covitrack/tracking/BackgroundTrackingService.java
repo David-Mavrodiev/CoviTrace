@@ -15,10 +15,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.covitrack.david.covitrack.MainActivity;
@@ -34,6 +30,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.covitrack.david.covitrack.App.CHANNEL_ID;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class BackgroundTrackingService extends Service implements LocationListener {
 
@@ -59,7 +60,7 @@ public class BackgroundTrackingService extends Service implements LocationListen
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, notificationIntent, 0);
+                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
 
         this.broadcastManager = LocalBroadcastManager.getInstance(this);
 

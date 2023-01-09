@@ -1,12 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
-const routers = require('./routers');
-const port = process.env.PORT || 3000;
+const routers = require("./routers");
+const port = process.env.PORT || 8080;
 
 // Load app config and database connection provider
-const config = require('./config').getConfig();
-const db = require('./database');
+const config = require("./config").getConfig();
+const db = require("./database");
 
 app.use(bodyParser.json());
 

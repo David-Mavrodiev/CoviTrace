@@ -1,9 +1,8 @@
 {
   "PAGE_LIMIT": 20,
-  "PORT": 3003,
+  "PORT": 8080,
   "MONGO_DEBUG": false,
-  "MODE_TYPE": "localhost",
-  "DBHOST": "localhost",
+  "DBHOST": "mongodb",
   "DBPORT": 27017,
   "DBNAME": "covitrace"
 }

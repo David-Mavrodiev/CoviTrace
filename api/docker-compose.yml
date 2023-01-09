@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  app:
+    depends_on:
+      - mongodb
+    #build: .
+    image: "davidmavrodiev/covitrace-api:latest"
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=mongodb
+      - DB_NAME=covitrace
+      - DB_PORT=27017
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:

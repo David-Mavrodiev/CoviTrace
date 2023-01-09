@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 
 public interface Api {
     public final String BASE_API_URL =
-            "https://covitrace-api.herokuapp.com/api/";
+            "http://api-loadbal-1dvebfns148ag-db9989432bfe33f9.elb.us-east-1.amazonaws.com:8080/api/";
 
     @POST("get-status")
     Call<StatusRequestModel> getStatus(@Body StatusRequestModel requestModel);

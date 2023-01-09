@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CoviTrace</string>
-
-    <!-- Confirmation dialog -->
     <string name="confirm_dialog_title">Сигурни ли сте?</string>
     <string name="confirm_dialog_cancel">Отказ</string>
     <string name="confirm_dialog_sure">Да, напълно</string>
     <string name="confirm_infected">Напълно сигурен ли сте, че сте заразен?</string>
     <string name="confirm_contact">Напълно сигурен ли сте, че сте контактували с заразен?</string>
-
-    <!-- Language dialog -->
     <string name="lang_dialog_title">Избери език</string>
-
-    <!-- Getting started -->
     <string name="go_out_title">Излизане</string>
     <string name="go_out_description">
         При излизане следенето трябва да бъде пуснато от потребителя.
@@ -35,29 +29,29 @@
         болен, веднага трябва да подадете сигнал и по този начин да
         помогнете за ограничение на заразата!
     </string>
-
-    <!-- User status types -->
+    <string name="confirm_contact_positive">
+        Are you sure? Please refer to the description before updating status!
+    </string>
+    <string name="confirm_contact_negative">
+        Are you sure? Please refer to the description before updating status!
+    </string>
+    <string name="confirm_healed">
+        Are you sure? Please refer to the description before updating status!
+    </string>
     <string name="user_contact_status">Контактен</string>
     <string name="user_infected_status">Заразен</string>
-
-    <!-- User status activity -->
     <string name="user_positive">Позитивен</string>
     <string name="user_negative">Отрицателен</string>
     <string name="user_healed">Излекуван</string>
-
-    <!-- Location -->
     <string name="unknown_location">[Неизвестна локация]</string>
     <string name="tracking_on">Пусни следене</string>
     <string name="tracking_off">Изключи следене</string>
-
-    <!-- Agendas -->
     <string name="contact_infected_agenda">
         Натисни избраната опция ако си информиран, че си:
     </string>
-
     <string name="help">Помощ</string>
     <string name="language">Език</string>
-
-    <!-- Error messages -->
     <string name="failed_send_location">Грешка при пращането на локация!</string>
+    <string name="failed_to_send_status">Failed to send status!</string>
+    <string name="failed_to_get_status">Failed to get status!</string>
 </resources>

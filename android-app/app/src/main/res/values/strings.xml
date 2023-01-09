@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">CoviTrace</string>
-
-    <!-- Confirmation dialog -->
     <string name="confirm_dialog_title">Confirmation dialog</string>
     <string name="confirm_dialog_cancel">Cancel</string>
     <string name="confirm_dialog_sure">Sure</string>
@@ -16,51 +14,34 @@
     <string name="confirm_healed">
         Are you sure? Please refer to the description before updating status!
     </string>
-
-    <!-- Language dialog -->
     <string name="lang_dialog_title">Choose language</string>
-
-    <!-- Getting started -->
     <string name="go_out_title">Go out</string>
     <string name="go_out_description">
-        When you go out, you have to turn your GPS on and also set 'Tracking on' option in the application.
+        When you go out, you have to turn your GPS on and also set \'Tracking on\' option in the application.
     </string>
     <string name="turn_on_gps_title">Turn on the GPS</string>
     <string name="turn_on_gps_description">
-        Once you are back at home, you can easily turn off tracking by toggle off the 'Tracking on' button
+        Once you are back at home, you can easily turn off tracking by toggle off the \'Tracking on\' button
     </string>
     <string name="check_for_signals_title">Look for signals</string>
     <string name="check_for_signals_description">
-        Application can sent you an alert that you have been close to some infected person...
+        Application can sent you an alert that you have been close to some infected person…
     </string>
     <string name="send_signal_title">Send signal</string>
     <string name="send_signal_description">
         If you are infected or contact a infected person, it is easy to send a signal!
     </string>
-
-    <!-- User status types -->
     <string name="user_contact_status">Contact</string>
     <string name="user_infected_status">Infected</string>
-    
-    <!-- User status activity -->
     <string name="user_positive">Positive</string>
     <string name="user_negative">Negative</string>
     <string name="user_healed">Healed</string>
-
-    <!-- Location -->
     <string name="unknown_location">[Unknown location]</string>
     <string name="tracking_on">Tracking on</string>
     <string name="tracking_off">Tracking off</string>
-
-    <!-- Agendas -->
-    <string name="contact_infected_agenda">
-        Press the chosen button in order to inform you're:
-    </string>
-
+    <string name="contact_infected_agenda">Press the chosen button in order to inform you\'re:</string>
     <string name="help">Help</string>
     <string name="language">Language</string>
-
-    <!-- Error messages -->
     <string name="failed_send_location">Failed to send location!</string>
     <string name="failed_to_send_status">Failed to send status!</string>
     <string name="failed_to_get_status">Failed to get status!</string>

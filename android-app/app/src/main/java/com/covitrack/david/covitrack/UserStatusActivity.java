@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.covitrack.david.covitrack.models.UserStatusType;
 import com.covitrack.david.covitrack.utils.Constants;
 import com.covitrack.david.covitrack.utils.IdentityManager;
 import com.covitrack.david.covitrack.utils.Utils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.Map;

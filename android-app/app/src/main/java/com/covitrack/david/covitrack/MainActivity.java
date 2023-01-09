@@ -3,7 +3,6 @@ package com.covitrack.david.covitrack;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,18 +14,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.covitrack.david.covitrack.api.CovitraceApiService;
 import com.covitrack.david.covitrack.api.models.requests.SendLocationRequestModel;
@@ -39,6 +36,7 @@ import com.covitrack.david.covitrack.utils.Constants;
 import com.covitrack.david.covitrack.utils.IdentityManager;
 import com.covitrack.david.covitrack.utils.PermissionHelper;
 import com.covitrack.david.covitrack.utils.Utils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
